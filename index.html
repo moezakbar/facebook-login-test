@@ -8,6 +8,15 @@
 <body>
   <h1>Welcome to My Facebook Login Test Page</h1>
 
+  <!-- Facebook Login Button -->
+  <fb:login-button 
+    scope="public_profile,email"
+    onlogin="checkLoginState();">
+  </fb:login-button>
+
+  <!-- Placeholder for user info -->
+  <div id="user-info"></div>
+
   <!-- Add Facebook SDK Script Here -->
   <script>
     window.fbAsyncInit = function() {
