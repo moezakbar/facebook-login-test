@@ -18,7 +18,10 @@
         version    : 'v20.0'
       });
 
-      FB.AppEvents.logPageView();
+      // Check login status
+        FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+        });
     };
 
     (function(d, s, id){
@@ -28,6 +31,33 @@
        js.src = "https://connect.facebook.net/en_US/sdk.js";
        fjs.parentNode.insertBefore(js, fjs);
      }(document, 'script', 'facebook-jssdk'));
+
+     // Callback function to handle login state changes
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    }
+
+    // Function to handle login status response
+    function statusChangeCallback(response) {
+      console.log(response);  // Debugging: show response in the console
+      if (response.status === 'connected') {
+        // User is logged into Facebook and has authenticated your app
+        getUserInfo();
+      } else {
+        // User is not logged in or not authorized
+        document.getElementById('user-info').innerHTML = 'Please log in to view your profile.';
+      }
+    }
+
+    // Function to retrieve user information
+    function getUserInfo() {
+      FB.api('/me', { fields: 'name, email' }, function(response) {
+        console.log('User info:', response);
+        document.getElementById('user-info').innerHTML = `Welcome, ${response.name}! Your email is ${response.email}.`;
+      });
+    }
   </script>
 </body>
 </html>
