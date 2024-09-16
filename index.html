@@ -10,7 +10,7 @@
 
   <!-- Facebook Login Button -->
   <fb:login-button 
-    scope="public_profile,email"
+    scope="public_profile,email,pages_manage_posts,pages_read_engagement"
     onlogin="checkLoginState();">
   </fb:login-button>
 
@@ -67,6 +67,33 @@
         document.getElementById('user-info').innerHTML = `Welcome, ${response.name}! Your email is ${response.email}.`;
       });
     }
+
+    function getUserPages() {
+        FB.api('/me/accounts', function(response) {
+            if (response && !response.error) {
+            console.log('Managed pages:', response.data);
+            displayPages(response.data);  // Call a function to display the pages
+            } else {
+            console.log('Error fetching pages:', response.error);
+            }
+        });
+    }
+
   </script>
+
+    <div id="pages-list"></div>
+
+    <script>
+        function displayPages(pages) {
+            var pagesList = document.getElementById('pages-list');
+            pages.forEach(page => {
+            pagesList.innerHTML += `<div>
+                <h3>${page.name}</h3>
+                <button onclick="postToPage('${page.id}', '${page.access_token}')">Post to Page</button>
+            </div>`;
+            });
+        }
+    </script>
+
 </body>
 </html>
